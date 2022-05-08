@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React<% if (applicationTypeGateway && microfrontend) { %>, { Suspense }<% } %> from 'react';
-import { Routes <% if (communicationSpringWebsocket) { %>, useLocation <% } %><% if (applicationTypeGateway && microfrontend) { %>, Route <% } %>} from 'react-router-dom';
+import { Routes <% if (communicationSpringWebsocket) { %>, useLocation <% } %>, Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -62,7 +62,7 @@ const <%= remote.capitalizedBaseName %>Routes = React.lazy(() => import('@<%= re
   <%_ } _%>
 <%_ } _%>
 
-const Routes = () => {
+const routes = () => {
 <%_ if (communicationSpringWebsocket) { _%>
   const location = useLocation();
   React.useEffect(() => {
@@ -134,4 +134,4 @@ const Routes = () => {
   );
 };
 
-export default Routes;
+export default routes;

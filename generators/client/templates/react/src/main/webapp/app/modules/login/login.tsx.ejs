@@ -17,19 +17,20 @@
  limitations under the License.
 -%>
 import React, { useState, useEffect } from 'react';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import {Route, Navigate,useNavigate, useLocation } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { login } from 'app/shared/reducers/authentication';
 import LoginModal from './login-modal';
 
-export const Login = (props: RouteComponentProps<any>) => {
+export const Login = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const loginError = useAppSelector(state => state.authentication.loginError);
   const showModalLogin = useAppSelector(state => state.authentication.showModalLogin);
   const [showModal, setShowModal] = useState(showModalLogin);
-
+  const location = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
     setShowModal(true);
   }, []);
@@ -38,14 +39,14 @@ export const Login = (props: RouteComponentProps<any>) => {
 
   const handleClose = () => {
     setShowModal(false);
-    props.history.push('/');
+    navigate('/');
   };
 
-  const { location } = props;
+  
   const { from } = location.state as any || { from: { pathname: '/', search: location.search } };
   if (isAuthenticated) {
-    return <Route render={() => 
-      <Redirect to={from} /> } />;
+    return <Route element={() => 
+      <Navigate to={from} /> } />;
 
   }
   return <LoginModal showModal={showModal} handleLogin={handleLogin} handleClose={handleClose} loginError={loginError} />;

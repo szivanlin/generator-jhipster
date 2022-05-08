@@ -17,16 +17,15 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-import { <% if (applicationTypeGateway && microfrontend) { %> Route <% } %>} from 'react-router-dom';
 
 import UserManagement from './user-management';
 import UserManagementDetail from './user-management-detail';
 import UserManagementUpdate from './user-management-update';
 import UserManagementDeleteDialog from './user-management-delete-dialog';
 
-const Routes = () => (
+const routes = () => (
   <>
     <Routes>
       <Route path={`new`}>
@@ -48,4 +47,4 @@ const Routes = () => (
   </>
 );
 
-export default Routes;
+export default routes;

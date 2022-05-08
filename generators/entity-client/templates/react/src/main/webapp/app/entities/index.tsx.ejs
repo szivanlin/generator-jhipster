@@ -19,8 +19,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import { <% if (applicationTypeGateway && microfrontend) { %> Route <% } %>} from 'react-router-dom';
-
 import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
 <%_ if (!readOnly) { _%>
@@ -32,22 +30,22 @@ const Routes = () => (
   <>
     <Route>
 <%_ if (!readOnly) { _%>
-      <Route exact path={`/new`} >
+      <Route  path={`/new`} >
         <<%= entityReactName %>Update />
       </Route>
-      <Route exact path={`:id/edit`}>
+      <Route  path={`:id/edit`}>
         <<%= entityReactName %>Update />
       </Route> 
 <%_ } _%>
-      <Route exact path={`:id`}>
+      <Route  path={`:id`}>
         <<%= entityReactName %>Detail  />
       </Route> 
-      <Route path={match.url}>
+      <Route >
         <<%= entityReactName %> />
       </Route>
     </Route>
 <%_ if (!readOnly) { _%>
-    <Route exact path={`:id/delete`} >
+    <Route  path={`:id/delete`} >
       <<%= entityReactName %>DeleteDialog />
     </Route>
 <%_ } _%>

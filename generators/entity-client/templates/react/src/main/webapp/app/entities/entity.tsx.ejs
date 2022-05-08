@@ -71,7 +71,7 @@ export const <%= entityReactName %> = () => {
   const [search, setSearch] = useState('');
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), searchParams.toString()));
+  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);
@@ -211,7 +211,7 @@ export const <%= entityReactName %> = () => {
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
-    if (searchParams !== endURL) {
+    if (location.search !== endURL) {
 
       navigate(`${location.pathname}${endURL}`);
     }
@@ -242,7 +242,7 @@ export const <%= entityReactName %> = () => {
         order: sortSplit[1]
       });
     }
-  }, [searchParams]);
+  }, [location.search]);
   <%_ } _%>
 
   const sort = p => () => {

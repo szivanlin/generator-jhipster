@@ -296,9 +296,7 @@ function cleanupOldFiles(generator) {
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/application-profile.spec.ts`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/reducers/authentication.spec.ts`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/util/entity-utils.spec.ts`);
-      generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/auth/private-route.spec.tsx`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary.spec.tsx`);
-      generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/error/error-boundary-route.spec.tsx`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/header.spec.tsx`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/menus/account.spec.tsx`);
       generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/modules/administration/administration.reducer.spec.ts`);
