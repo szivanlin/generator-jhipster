@@ -98,7 +98,6 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
     );
   };
 
-  const { match } = props;
   const account = useAppSelector(state => state.authentication.account);
   const users = useAppSelector(state => state.userManagement.users);
   const totalItems = useAppSelector(state => state.userManagement.totalItems);
@@ -112,7 +111,7 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity">
+          <Link to={`new`} className="btn btn-primary jh-create-entity">
             <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
           </Link>
         </div>
@@ -146,7 +145,7 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
             <tr id={user.login} key={`user-${i}`}>
               <td>
                 <Button
-                  tag={Link} to={`${match.url}/${user.login}`}
+                  tag={Link} to={`${user.login}`}
                   color="link" size="sm"
                 >
                   {user.id}
@@ -192,19 +191,19 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
               <td className="text-end">
                 <div className="btn-group flex-btn-group-container">
                   <Button
-                    tag={Link} to={`${match.url}/${user.login}`}
+                    tag={Link} to={`${user.login}`}
                     color="info" size="sm"
                   >
                     <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                   </Button>
                   <Button
-                    tag={Link} to={`${match.url}/${user.login}/edit`}
+                    tag={Link} to={`${user.login}/edit`}
                     color="primary" size="sm"
                   >
                     <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                   </Button>
                   <Button
-                    tag={Link} to={`${match.url}/${user.login}/delete`}
+                    tag={Link} to={`${user.login}/delete`}
                     color="danger" size="sm" disabled={account.login === user.login}
                   >
                     <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>

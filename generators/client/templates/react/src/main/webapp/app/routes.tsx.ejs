@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React<% if (applicationTypeGateway && microfrontend) { %>, { Suspense }<% } %> from 'react';
-import { Switch <% if (communicationSpringWebsocket) { %>, useLocation <% } %><% if (applicationTypeGateway && microfrontend) { %>, Route <% } %>} from 'react-router-dom';
+import { Routes <% if (communicationSpringWebsocket) { %>, useLocation <% } %><% if (applicationTypeGateway && microfrontend) { %>, Route <% } %>} from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -35,8 +35,7 @@ import PasswordResetFinish from 'app/modules/account/password-reset/finish/passw
 import Logout from 'app/modules/login/logout';
 import Home from 'app/modules/home/home';
 import EntitiesRoutes from 'app/entities/routes';
-import PrivateRoute from 'app/shared/auth/private-route';
-import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
+
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 <%_ if (communicationSpringWebsocket) { _%>
@@ -72,37 +71,65 @@ const Routes = () => {
 <%_ } _%>
   return (
     <div className="view-routes">
-      <Switch>
+      <Routes>
 <%_ if (!authenticationTypeOauth2) { _%>
-        <ErrorBoundaryRoute path="/login" component={Login} />
+        <Route path="/login" >
+          <Login/>
+        </Route>
 <%_ } _%>
-        <ErrorBoundaryRoute path="/logout" component={Logout} />
+        <Route path="/logout" >
+          <Logout/>
+        </Route>
 <%_ if (!skipUserManagement) { _%>
-        <ErrorBoundaryRoute path="/account/register" component={Register} />
-        <ErrorBoundaryRoute path="/account/activate/:key?" component={Activate} />
-        <ErrorBoundaryRoute path="/account/reset/request" component={PasswordResetInit} />
-        <ErrorBoundaryRoute path="/account/reset/finish/:key?" component={PasswordResetFinish} />
+        <Route path="/account/register">
+          <Register />
+        </Route> 
+        <Route path="/account/activate/:key?">
+          <Activate />
+        </Route> 
+        <Route path="/account/reset/request" >
+          <PasswordResetInit />
+        </Route>
+        <Route path="/account/reset/finish/:key?">
+          <PasswordResetFinish />
+        </Route> 
 <%_ } _%>
-        <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
+        <Route path="/admin" >
+          <Admin/>
+        </Route>
+
 <%_ if (!skipUserManagement) { _%>
-        <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
+        <Route path="/account" >
+          <Account/>
+        </Route>
 <%_ } _%>
-        <ErrorBoundaryRoute path="/" exact component={Home}/>
+        <Route path="/" >
+          <Home/>
+        </Route>
 <%_ if (authenticationTypeOauth2) { _%>
-        <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
+        <Route path="/oauth2/authorization/oidc">
+          <LoginRedirect />
+        </Route>
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
         <Route path="/<%= remote.lowercaseBaseName %>/">
           <Suspense fallback={loading}>
-            <PrivateRoute component={<%= remote.capitalizedBaseName %>Routes} hasAnyAuthorities={[AUTHORITIES.USER]} />
+            <Route >
+              <<%= remote.capitalizedBaseName %>Routes />
+            </Route>
+          
           </Suspense>
         </Route>
   <%_ } _%>
 <%_ } _%>
-        <PrivateRoute path="/<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]}/>
-        <ErrorBoundaryRoute component={PageNotFound} />
-      </Switch>
+        <Route  path="/<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>" >
+          <EntitiesRoutes/>
+        </Route> 
+        <Route>
+          <PageNotFound/>
+        </Route> 
+      </Routes>
     </div>
   );
 };

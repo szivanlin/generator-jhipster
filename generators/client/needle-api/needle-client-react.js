@@ -60,9 +60,11 @@ module.exports = class extends needleClientBase {
       indexModulePath,
       'jhipster-needle-add-route-path',
       this.generator.stripMargin(
-        `|<ErrorBoundaryRoute path={\`\${match.url}${
+        `|<Route path={\`\${
           this.generator.microfrontend && this.generator.applicationTypeMicroservice ? '/' : ''
-        }${entityFileName}\`} component={${entityName}} />`
+        }${entityFileName}\`} >
+            <${entityName} />
+          </Route>`
       )
     );
     this.addBlockContentToFile(indexAddRoutePathRewriteFileModel, errorMessage(indexModulePath));
