@@ -28,22 +28,12 @@ import UserManagementDeleteDialog from './user-management-delete-dialog';
 const routes = () => (
   <>
     <Routes>
-      <Route path={`new`}>
-        <UserManagementUpdate />
-      </Route> 
-      <Route path={`:login/edit`} >
-        <UserManagementUpdate />
-      </Route>
-      <Route path={`:login`}>
-        <UserManagementDetail/>
-      </Route> 
-      <Route >
-        <UserManagement />
-      </Route>
+      <Route path={`new`} element={<UserManagementUpdate />} />
+      <Route path={`:login/edit`}  element={<UserManagementUpdate />} />
+      <Route path={`:login`} element={<UserManagementDetail/>} />
+      <Route  element={ <UserManagement />} />
     </Routes>
-    <Route path={`:login/delete`}>
-      <UserManagementDeleteDialog />
-    </Route> 
+    <Route path={`:login/delete`} element={<UserManagementDeleteDialog />} />
   </>
 );
 

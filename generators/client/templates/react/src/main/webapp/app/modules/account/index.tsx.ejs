@@ -28,16 +28,10 @@ import Sessions from './sessions/sessions';
 
 const Routes = () => (
   <div>
-    <Route path={`settings`}>
-      <Settings />
-    </Route> 
-    <Route path={`password`}>
-      <Password />
-    </Route>
+    <Route path={`settings`} element={ <Settings />} />
+    <Route path={`password`} element={<Password />} />
 <%_ if (authenticationTypeSession) { _%>
-    <Route path={`sessions`}>
-      <Sessions />
-    </Route> 
+    <Route path={`sessions`} element={<Sessions />} />
 <%_ } _%>
   </div>
 );

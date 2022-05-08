@@ -40,37 +40,21 @@ import Tracker from './tracker/tracker';
 const Routes = () => (
   <div>
 <%_ if (!skipUserManagement) { _%>
-    <Route path={`user-management`} >
-      <UserManagement />
-    </Route>
+    <Route path={`user-management`} element={<UserManagement />} />
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-    <Route path={`tracker`}>
-      <Tracker />
-    </Route> 
+    <Route path={`tracker`} element={<Tracker />} />
 <%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-    <Route path={`gateway`}>
-      <Gateway />
-    </Route>
+    <Route path={`gateway`} element={<Gateway />} />
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-    <Route path={`health`} >
-      <Health />
-    </Route>
-    <Route path={`metrics`}>
-      <Metrics />
-    </Route>
-    <Route path={`configuration`}>
-      <Configuration />
-    </Route> 
-    <Route path={`logs`}>
-      <Logs />
-    </Route> 
+    <Route path={`health`}  element={<Health />} />
+    <Route path={`metrics`} element={<Metrics />} />
+    <Route path={`configuration`} element={<Configuration />} />
+    <Route path={`logs`} element={<Logs />} />
   <%_ } _%>
-    <Route path={`docs`}>
-      <Docs />
-    </Route> 
+    <Route path={`docs`} element={<Docs />} />
   </div>
 );
 
