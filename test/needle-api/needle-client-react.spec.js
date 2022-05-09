@@ -97,7 +97,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
 
   it('Assert entity is added to module', () => {
     const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
-    const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
+    const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/reducers/entities/reducers.ts`;
 
     assert.fileContent(indexModulePath, "import entityName from './entityFolderName';");
     // assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}entityFileName`} component={entityName} />'); // eslint-disable-line

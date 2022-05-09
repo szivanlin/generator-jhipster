@@ -59,7 +59,7 @@ import {
 <%_ if (paginationInfiniteScroll) { _%>
   reset,
 <%_ } _%>
-} from './<%= entityFileName %>.reducer';
+} from 'app/reducers/entities/<%= entityFileName %>/<%= entityFileName %>.reducer';
 
 export const <%= entityReactName %> = () => {
   const dispatch = useAppDispatch();
@@ -71,7 +71,7 @@ export const <%= entityReactName %> = () => {
   const [search, setSearch] = useState('');
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
+  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), searchParams));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);

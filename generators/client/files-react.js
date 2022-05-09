@@ -92,10 +92,15 @@ const files = {
     {
       path: REACT_DIR,
       templates: [
-        'entities/reducers.ts',
         { file: 'entities/menu.tsx', method: 'processJsx' },
         { file: 'entities/routes.tsx', method: 'processJsx' },
       ],
+    },
+  ],
+  reactReducers: [
+    {
+      path: REACT_DIR,
+      templates: ['reducers/entities/reducers.ts'],
     },
   ],
   reactMain: [

@@ -30,24 +30,14 @@ const Routes = () => (
   <>
     <Route>
 <%_ if (!readOnly) { _%>
-      <Route  path={`/new`} >
-        <<%= entityReactName %>Update />
-      </Route>
-      <Route  path={`:id/edit`}>
-        <<%= entityReactName %>Update />
-      </Route> 
+      <Route  path={`new`} element={<<%= entityReactName %>Update />} />
+      <Route  path={`:id/edit`} element={<<%= entityReactName %>Update  />}/>
 <%_ } _%>
-      <Route  path={`:id`}>
-        <<%= entityReactName %>Detail  />
-      </Route> 
-      <Route >
-        <<%= entityReactName %> />
-      </Route>
+      <Route  path={`:id`} element={<<%= entityReactName %>Detail  />}/>
+      <Route  element={<<%= entityReactName %> />}/>
     </Route>
 <%_ if (!readOnly) { _%>
-    <Route  path={`:id/delete`} >
-      <<%= entityReactName %>DeleteDialog />
-    </Route>
+    <Route  path={`:id/delete`}  element={ <<%= entityReactName %>DeleteDialog />}/>
 <%_ } _%>
   </>
 );

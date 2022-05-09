@@ -10415,7 +10415,7 @@ Object {
   "src/main/webapp/app/entities/menu.tsx": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/reducers.ts": Object {
+  "src/main/webapp/app/reducers/entities/reducers.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/routes.tsx": Object {

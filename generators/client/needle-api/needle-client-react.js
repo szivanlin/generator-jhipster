@@ -42,7 +42,7 @@ module.exports = class extends needleClientBase {
 
   addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName) {
     const indexModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
-    const indexReducerPath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
+    const indexReducerPath = `${this.CLIENT_MAIN_SRC_DIR}app/reducers/entities/reducers.ts`;
 
     const errorMessage = path =>
       `${chalk.yellow('Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(
@@ -70,7 +70,7 @@ module.exports = class extends needleClientBase {
     const reducerAddImportRewriteFileModel = this.generateFileModel(
       indexReducerPath,
       'jhipster-needle-add-reducer-import', // prettier-ignore
-      this.generator.stripMargin(`import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
+      this.generator.stripMargin(`import ${entityInstance} from 'app/reducers/entities/${entityFolderName}/${entityFileName}.reducer';`)
     );
     this.addBlockContentToFile(reducerAddImportRewriteFileModel, errorMessage(indexReducerPath));
 

@@ -92,7 +92,7 @@ import { getUsers } from 'app/modules/administration/user-management/user-manage
       <%_ if (uniqueRel.otherEntityAngularName !== entityReactName) { _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
       <%_ } _%>
-import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
+import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/reducers/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
     <%_ } _%>
   <%_ } _%>
 <%_ }); _%>
@@ -106,7 +106,7 @@ import {
   updateEntity,
   createEntity,
   reset
-} from './<%= entityFileName %>.reducer';
+} from 'app/reducers/entities/<%= entityFileName %>/<%= entityFileName %>.reducer';
 
 export const <%= entityReactName %>Update = () => {
   const dispatch = useAppDispatch();

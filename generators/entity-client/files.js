@@ -187,7 +187,7 @@ const reactFiles = {
         },
         {
           file: 'entities/entity.reducer.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`,
+          renameTo: generator => `reducers/entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`,
         },
         {
           file: 'entities/index.tsx',
@@ -229,7 +229,7 @@ const reactFiles = {
       templates: [
         {
           file: 'entities/entity-reducer.spec.ts',
-          renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
+          renameTo: generator => `reducers/entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`,
         },
       ],
     },
