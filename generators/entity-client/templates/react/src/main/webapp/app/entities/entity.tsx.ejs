@@ -59,7 +59,7 @@ import {
 <%_ if (paginationInfiniteScroll) { _%>
   reset,
 <%_ } _%>
-} from 'app/reducers/entities/<%= entityFileName %>/<%= entityFileName %>.reducer';
+} from 'app/reducers/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 
 export const <%= entityReactName %> = () => {
   const dispatch = useAppDispatch();

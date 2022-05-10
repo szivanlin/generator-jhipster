@@ -24,7 +24,7 @@ import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from 'app/reducers/entities/<%= entityFileName %>/<%= entityFileName %>.reducer';
+import { getEntity, deleteEntity } from 'app/reducers/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 
 export const <%= entityReactName %>DeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);

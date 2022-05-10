@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Routes , Route} from 'react-router-dom';
 
 import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
@@ -26,20 +26,20 @@ import <%= entityReactName %>Update from './<%= entityFileName %>-update';
 import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-dialog';
 <%_ } _%>
 
-const Routes = () => (
+const getRoutes = () => (
   <>
-    <Route>
+    <Routes>
 <%_ if (!readOnly) { _%>
       <Route  path={`new`} element={<<%= entityReactName %>Update />} />
       <Route  path={`:id/edit`} element={<<%= entityReactName %>Update  />}/>
 <%_ } _%>
       <Route  path={`:id`} element={<<%= entityReactName %>Detail  />}/>
-      <Route  element={<<%= entityReactName %> />}/>
-    </Route>
+      <Route  index  element={<<%= entityReactName %> />}/>
 <%_ if (!readOnly) { _%>
-    <Route  path={`:id/delete`}  element={ <<%= entityReactName %>DeleteDialog />}/>
+      <Route  path={`:id/delete`}  element={ <<%= entityReactName %>DeleteDialog />}/>
 <%_ } _%>
+    </Routes>
   </>
 );
 
-export default Routes;
+export default getRoutes;
