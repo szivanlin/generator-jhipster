@@ -26,22 +26,12 @@ for (const field of fields.filter(field => !field.id)) {
 _%>
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams , useSearchParams} from 'react-router-dom';
-import {
-  Button,
-  Row,
-  Col,
-  FormText,
-  <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip,<% } %>
-} from 'reactstrap';
+
 import {
   isNumber,
   Translate,
   translate,
-  ValidatedField,
-  ValidatedForm,
-  <% if (fieldsContainBlobOrImage) { %> ValidatedBlobField,<% } %>
 } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
@@ -107,6 +97,26 @@ import {
   createEntity,
   reset
 } from 'app/reducers/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
+import { useForm, Controller } from 'react-hook-form';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import FormLabel from '@mui/material/FormLabel';
+import TextField from '@mui/material/TextField';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { CheckboxElement, FormContainer, TextFieldElement, SelectElement, MultiSelectElement } from 'react-hook-form-mui';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SaveIcon from '@mui/icons-material/Save';
+import Button from '@mui/material/Button';
+
+
+
+const enumToArray = function (enumeration): Object[] {
+    return Object.keys(enumeration)
+        .map(key => ({
+            id: String(key),
+            title: enumeration[key]
+        }));
+}
 
 export const <%= entityReactName %>Update = () => {
   const dispatch = useAppDispatch();
@@ -122,9 +132,21 @@ export const <%= entityReactName %>Update = () => {
   const loading = useAppSelector(state => state.<%= entityReactState %>.loading);
   const updating = useAppSelector(state => state.<%= entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%= entityReactState %>.updateSuccess);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({ mode: 'onBlur' });
+
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
   const <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+
+  const <%- _.lowerFirst(importedType) %>Options = enumToArray(<%- importedType %>);
+
   <%_ }); _%>
+
+
   const handleClose = () => {
     navigate('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + searchParams<%_ } _%>);
   }
@@ -221,104 +243,190 @@ _%>
 <%_ }) _%>
         };
 
-  return (
-    <div>
-    <Row className="justify-content-center">
-      <Col md="8">
+
+
+        return (
+    <Box>
+      <Grid
+        container
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+      <Grid item md={8}>
         <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading">
           <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClass %></Translate>
         </h2>
-      </Col>
-    </Row>
-    <Row className="justify-content-center">
-      <Col md="8">
+      </Grid>
+    </Grid>
+    <Grid
+        container
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+      <Grid item md={8}>
         { loading ? <p>Loading...</p> :
-        <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity} >
+        <FormContainer defaultValues={defaultValues()} onSuccess={saveEntity} >
+          <Grid
+                container
+                item
+                sx={{
+                  display: 'flex',
+                }}
+              >
           { !isNew ?
-            <ValidatedField
-              name="<%= primaryKey.fields[0].fieldName %>" required readOnly
-              id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"
-              label={translate('<%= primaryKey.fields[0].fieldTranslationKey %>')}
-              validate={{ required: true }}
-            />
+            <Grid item xs={12}>
+              <FormLabel required sx={{marginBottom: 1}} >
+                  <Translate contentKey="<%= primaryKey.fields[0].fieldTranslationKey %>"/>
+              </FormLabel>
+              <TextFieldElement
+                size="small"
+                name="<%= primaryKey.fields[0].fieldName %>" required disabled 
+                id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"
+                validation={{ required: true }}
+                control={control}
+                sx={{
+                      marginBottom: 2,
+                      '& legend': {
+                        display: 'none',
+                      },
+                }}
+                fullWidth
+              />
+            </Grid>
             : null
           }
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldType = field.fieldType;
     const fieldName = field.fieldName;
-    const fieldNameHumanized = field.fieldNameHumanized;
-
-    if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-          <ValidatedBlobField
-  <%_ } else { _%>
-          <ValidatedField
-  <%_ } _%>
-  <%_ if (enableTranslation) { _%>
-            label={translate('<%= field.fieldTranslationKey %>')}
-  <%_ } else { _%>
-            label="<%= fieldNameHumanized %>"
-  <%_ } _%>
-            id="<%= entityFileName %>-<%= fieldName %>"
-            name="<%= fieldName %>"
-            data-cy="<%= fieldName %>"
-  <%_ if (field.fieldTypeBoolean) { _%>
-            check
-            type="checkbox"
-          />
-  <%_ } else if (field.fieldTypeTimed) { _%>
-            type="datetime-local"
-            placeholder="YYYY-MM-DD HH:mm"
-            <%- include('react_validators'); %>
-          />
-  <%_ } else if (field.fieldTypeLocalDate) { _%>
-            type="date"
-            <%- include('react_validators'); %>
-          />
-  <%_ } else if (field.fieldIsEnum) {_%>
-            type="select"
-          >
-          <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-          {<%= _.lowerFirst(fieldType) %>Values.map(<%= _.lowerFirst(fieldType) %> => (
-              <option value={<%= _.lowerFirst(fieldType) %>} key={<%= _.lowerFirst(fieldType) %>}>
-      <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>."+<%= _.lowerFirst(fieldType) %>)}
-      <%_ } else { _%>
-                {<%= _.lowerFirst(fieldType) %>}
-      <%_ } _%>
-              </option>))}
-          </ValidatedField>
-  <%_ } else if (field.fieldTypeNumeric) { _%>
-            type="text"
-            <%- include('react_validators'); %>
-          />
-  <%_ } else if (field.fieldTypeBinary) { _%>
-    <%_ if (!field.blobContentTypeText) {  _%>
-            <%_ if (field.blobContentTypeImage) {_%>
-            isImage accept="image/*"
+    const fieldNameHumanized = field.fieldNameHumanized; _%>
+            <Grid item xs={12}>
+           
+            <%_ if (field.fieldTypeBoolean) { _%>             
+              <CheckboxElement    
+                size="small"
+                id="<%= entityFileName %>-<%= fieldName %>"
+                name="<%= fieldName %>"
+              <%_ if (enableTranslation) { _%>
+                label={translate('<%= field.fieldTranslationKey %>')}
+              <%_ } else { _%>
+                label="<%= fieldNameHumanized %>"
+              <%_ } _%>
+                data-cy="<%= fieldName %>"
+                control={control}
+              />
+            <%_ } else if ((field.fieldTypeTimed) || (field.fieldTypeLocalDate)) { _%>
+              <FormLabel 
+              <%_ if(field.fieldValidationRequired) { _%>
+                  required
+              <%_ } _%>             
+               sx={{marginBottom: 1}} >
+                  <Translate contentKey="<%= field.fieldTranslationKey %>"/>
+              </FormLabel>   
+              <Controller
+                name="<%= fieldName %>"
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { error, invalid } }) =>
+                  <DateTimePicker
+                    value={value || ''}
+                    onChange={onChange}
+                    renderInput={
+                      (params) =>
+                        <TextField
+                          id="<%= entityFileName %>-<%= fieldName %>"
+                          data-cy="<%= fieldName %>"  
+                          size="small"
+                          {...params}
+                          sx={{
+                            marginBottom: 2,
+                            '& legend': {
+                              display: 'none',
+                            },
+                          }}    
+                          fullWidth 
+                      <%_ if(field.fieldValidationRequired) { _%>
+                          required
+                      <%_ } _%>
+                          error={invalid}
+                          helperText={
+                            error
+                              ? error.message
+                              : null
+                          }
+                        />
+                    }
+                  />}
+              />
+            <%_ } else if (field.fieldIsEnum) {_%>
+              <FormLabel 
+              <%_ if(field.fieldValidationRequired) { _%>
+                  required
+              <%_ } _%>               
+                  sx={{marginBottom: 1}} >
+                <%_ if (enableTranslation) { _%>
+                  <Translate contentKey="<%= field.fieldTranslationKey %>"/>
+                <%_ } else { _%>
+                  <%= fieldNameHumanized %>
+                <%_ } _%>                
+              </FormLabel>   
+              <SelectElement    
+                size="small"
+                id="<%= entityFileName %>-<%= fieldName %>"
+                name="<%= fieldName %>"
+                data-cy="<%= fieldName %>"
+                control={control}
+              <%_ if(field.fieldValidationRequired) { _%>
+                required
+              <%_ } _%>  
+                valueKey = 'id'
+                labelKey = 'title' 
+                options =  {<%= _.lowerFirst(fieldType) %>Options}
+                sx={{
+                      marginBottom: 2,
+                      '& legend': {
+                        display: 'none',
+                      },
+                }}
+                fullWidth
+              />           
             <%_ } else { _%>
-            openActionLabel={translate('entity.action.open')}
+              <FormLabel 
+              <%_ if(field.fieldValidationRequired) { _%>
+                  required
+              <%_ } _%>               
+                  sx={{marginBottom: 1}} >
+                <%_ if (enableTranslation) { _%>
+                  <Translate contentKey="<%= field.fieldTranslationKey %>"/>
+                <%_ } else { _%>
+                  <%= fieldNameHumanized %>
+                <%_ } _%>                
+              </FormLabel>   
+              <TextFieldElement
+                size="small"
+                id="<%= entityFileName %>-<%= fieldName %>"
+                name="<%= fieldName %>"
+                data-cy="<%= fieldName %>"
+                control={control}
+                <%- include('react_validators'); %>
+              <%_ if(field.fieldValidationRequired) { _%>
+                required
+              <%_ } _%>  
+              <%_ if (field.fieldTypeNumeric) { _%>      
+                type="number"
+              <%_ } _%>    
+                sx={{
+                      marginBottom: 2,
+                      '& legend': {
+                        display: 'none',
+                      },
+                }}
+                fullWidth
+              />              
             <%_ } _%>
-            <%- include('react_validators'); %>
-          />
-    <%_ } else { _%>
-            type="textarea"
-            <%- include('react_validators'); %>
-          />
-    <%_ } _%>
-  <%_ } else { _%>
-           type="text"
-           <%- include('react_validators'); %>
-        />
-  <%_ } _%>
-  <%_ if (field.javadoc) { _%>
-          <UncontrolledTooltip target="<%= fieldName %>Label">
-    <%_ if (enableTranslation) { _%>
-            <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
-    <%_ } else { _%>
-            <%= field.javadoc %>
-    <%_ } _%>
-          </UncontrolledTooltip>
-  <%_ } _%>
+          </Grid>
 <%_ } _%>
 <%_ relationships.forEach(rel => {
     const ownerSide = rel.ownerSide;
@@ -331,76 +439,101 @@ _%>
     const otherEntityField = rel.otherEntityField;
     const relationshipRequired = rel.relationshipRequired;
     const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
+            <Grid item xs={12}>
+              <FormLabel 
+              <%_ if (relationshipRequired) { _%>
+                required
+              <%_ } _%>             
+                sx={{marginBottom: 1}} >
+                <%_ if (enableTranslation) { _%>
+                  <Translate contentKey="<%= translationKey %>"/>
+                <%_ } else { _%>
+                  <%= relationshipNameHumanized %>
+                <%_ } _%>  
+              </FormLabel> 
   <%_ if (rel.relationshipManyToOne || (rel.relationshipOneToOne && ownerSide)) { _%>
-          <ValidatedField
-            id="<%= entityFileName %>-<%= relationshipName %>"
-            name="<%= relationshipFieldName %>"
-            data-cy="<%= relationshipFieldName %>"
-      <%_ if (enableTranslation) { _%>
-            label={translate('<%= translationKey %>')}
-      <%_ } else { _%>
-            label="<%= relationshipNameHumanized %>"
-      <%_ } _%>
-            type="select"
-      <%_ if (relationshipRequired) { _%>
-            required
-      <%_ } _%>
-          >
-              <option value="" key="0" />
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                  <option
-                    value={otherEntity.<%= otherEntityPkName %>}
-                    key={otherEntity.<%= otherEntityPkName %>}>
-                    {otherEntity.<%= otherEntityField %>}
-                  </option>
-                ) : null
-              }
-          </ValidatedField>
-    <%_ if (relationshipRequired) { _%>
-            <FormText><Translate contentKey="entity.validation.required">This field is required.</Translate></FormText>
-    <%_ } _%>
+              <SelectElement    
+                size="small"
+                id="<%= entityFileName %>-<%= relationshipName %>"
+                name="<%= relationshipFieldName %>"
+                data-cy="<%= relationshipFieldName %>"
+                control={control}            
+              <%_ if (relationshipRequired) { _%>
+                required
+              <%_ } _%>
+                valueKey = '<%= otherEntityPkName %>'
+                labelKey = '<%= otherEntityField %>'
+                options={<%= otherEntityNamePlural %>}
+                sx={{
+                      marginBottom: 2,
+                      '& legend': {
+                        display: 'none',
+                      },
+                }}
+                fullWidth
+              />
   <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
-          <ValidatedField
-        <%_ if (enableTranslation) { _%>
-            label={translate('<%= i18nKeyPrefix %>.<%= relationshipName %>')}
-        <%_ } else { _%>
-            label="<%= relationshipNameHumanized %>"
-        <%_ } _%>
-            id="<%= entityFileName %>-<%= relationshipName %>"
-            data-cy="<%= relationshipFieldName %>"
-            type="select"
-            multiple
-            name="<%= relationshipFieldNamePlural %>"
-            >
-              <option value="" key="0" />
-              {
-                (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                <option
-                    value={otherEntity.<%= otherEntityPkName %>}
-                    key={otherEntity.<%= otherEntityPkName %>}>
-                    {otherEntity.<%= otherEntityField %>}
-                </option>
-                ) : null
-              }
-          </ValidatedField>
+              <MultiSelectElement    
+                size="small"
+                id="<%= entityFileName %>-<%= relationshipName %>"
+                name="<%= relationshipFieldNamePlural %>"
+                data-cy="<%= relationshipFieldName %>"
+                control={control}            
+                showCheckbox
+              <%_ if (relationshipRequired) { _%>
+                required
+              <%_ } _%>
+                itemKey = '<%= otherEntityPkName %>'
+                itemValue = '<%= otherEntityPkName %>'
+                itemLabel = '<%= otherEntityField %>'
+                menuItems={<%= otherEntityNamePlural %>}
+                sx={{
+                      marginBottom: 2,
+                      '& legend': {
+                        display: 'none',
+                      },
+                }}
+                fullWidth
+              />
   <%_ } _%>
+            </Grid>
 <%_ }) _%>
-          <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityPage %>" replace color="info">
-            <FontAwesomeIcon icon="arrow-left" />&nbsp;
-            <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
-          </Button>
-          &nbsp;
-          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-            <FontAwesomeIcon icon="save" />&nbsp;
-            <Translate contentKey="entity.action.save">Save</Translate>
-          </Button>
-        </ValidatedForm>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                id="cancel-save"
+                component={Link}
+                to="/<%= entityPage %>"
+                replace
+                color="info"
+                data-cy="entityCreateCancelButton"
+                startIcon={<ArrowBackIcon />}
+              >
+                &nbsp; <Translate contentKey="entity.action.back">Back</Translate>
+              </Button>
+              &nbsp;
+              <Button
+                variant="contained"
+                color="primary"
+                id="save-entity"
+                data-cy="entityCreateSaveButton"
+                startIcon={<SaveIcon />}
+                type="submit"
+                disabled={updating}
+              >
+                &nbsp; <Translate contentKey="entity.action.save">Save</Translate>
+              </Button>
+
+            </Grid>
+        </Grid>          
+      </FormContainer>
         }
-      </Col>
-    </Row>
-  </div>
+      </Grid>
+    </Grid>
+  </Box>
   );
+
+
 };
 
 export default <%= entityReactName %>Update;

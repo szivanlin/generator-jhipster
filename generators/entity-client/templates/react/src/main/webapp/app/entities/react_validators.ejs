@@ -45,7 +45,7 @@ if (field.fieldValidate === true) {
     }
 
     result = validators.join(',\n                ');
-    result = `validate={{\n                ${result}\n                }}`;
+    result = `validation={{\n                ${result}\n                }}`;
 }
 -%>
 <%- result -%>
