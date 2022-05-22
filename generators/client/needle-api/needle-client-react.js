@@ -22,10 +22,10 @@ const _ = require('lodash');
 const needleClientBase = require('./needle-client');
 
 module.exports = class extends needleClientBase {
-  addAppSCSSStyle(style, comment) {
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}app/app.scss`;
-    this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
-  }
+  // addAppSCSSStyle(style, comment) {
+  //   const filePath = `${this.CLIENT_MAIN_SRC_DIR}app/app.scss`;
+  //   this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
+  // }
 
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
