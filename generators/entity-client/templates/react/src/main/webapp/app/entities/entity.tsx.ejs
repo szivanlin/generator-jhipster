@@ -33,7 +33,7 @@ import {
   <% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (!paginationNo) { _%>
   , getSortState
-  } _%>
+  <% } _%>
 } from 'react-jhipster';
 
 
@@ -411,7 +411,7 @@ export const <%= entityReactName %> = () => {
   
   return (
     <StyledBox>
-      <Typography variant="h2" sx="{{ ml: 2 }}" id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
+      <Typography variant="h2" sx={{ ml: 2 }} id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button color="info" onClick={handleSyncList} disabled={loading} startIcon={<RefreshIcon/>}>
